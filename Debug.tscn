@@ -1,0 +1,26 @@
+[gd_scene load_steps=3 format=3 uid="uid://fspunemmgg56"]
+
+[ext_resource type="Script" path="res://Debug.gd" id="1_45q1j"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_fkau6"]
+font_size = 24
+
+[node name="Debug" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -1728.0
+offset_bottom = -972.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_45q1j")
+
+[node name="FPS" type="Label" parent="."]
+layout_mode = 0
+offset_left = 33.0
+offset_top = 29.0
+offset_right = 73.0
+offset_bottom = 52.0
+text = "FPS"
+label_settings = SubResource("LabelSettings_fkau6")
