@@ -38,7 +38,7 @@ func _input(event) -> void:
 			_pickup_ammo()
 		else:
 			if _catapult_in_range:
-				pass
+				_load_ammo()
 			else:
 				_drop_ammo()
 	if Input.is_action_just_pressed("Attach"):
@@ -75,6 +75,14 @@ func _physics_process(delta) -> void:
 	move_and_slide()
 
 
+func _load_ammo() -> void:
+	if _catapult.has_ammo_space():
+		$Ammo.remove_child(held_ammo)
+		_catapult.load_ammo(held_ammo)
+		held_ammo = null
+		ammo_type = null
+
+
 func catapult_in_range() -> void:
 	_catapult_in_range = true
 
@@ -86,7 +94,7 @@ func catapult_out_of_range() -> void:
 func _attach() -> void:
 	_attached = true
 	_catapult.attach()
-	global_position = _catapult.get_node("CharPos").global_position
+	global_position = _catapult.char_pos
 	basis = basis.looking_at(-_catapult.basis.z)
 	$ArmBuffer.basis = basis.looking_at(-basis.z)
 
@@ -107,7 +115,6 @@ func _pickup_ammo() -> void:
 
 func _drop_ammo() -> void:
 	ammo_dropped.emit(ammo_type, held_ammo.global_position)
-	$Ammo.remove_child(held_ammo)
 	held_ammo.queue_free()
 	held_ammo = null
 	ammo_type = null

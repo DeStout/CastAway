@@ -2,109 +2,166 @@
 
 [ext_resource type="Script" path="res://Characters/Catapult.gd" id="1_s163j"]
 
-[sub_resource type="SphereShape3D" id="SphereShape3D_gsx4y"]
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_i4ydp"]
-size = Vector3(1.2, 0.975, 1.5)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dql41"]
-albedo_color = Color(0.694118, 0, 0.0588235, 1)
-
-[sub_resource type="BoxMesh" id="BoxMesh_6lci5"]
-material = SubResource("StandardMaterial3D_dql41")
-size = Vector3(1, 0.75, 1.5)
-
 [sub_resource type="BoxMesh" id="BoxMesh_wl28e"]
 size = Vector3(0.1, 0.05, 1.2)
 
 [sub_resource type="BoxMesh" id="BoxMesh_10u85"]
 size = Vector3(0.25, 0.05, 0.031)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_01bsm"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4qh3m"]
 albedo_color = Color(0.243137, 0.243137, 0.243137, 1)
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_8acbe"]
-material = SubResource("StandardMaterial3D_01bsm")
+material = SubResource("StandardMaterial3D_4qh3m")
 top_radius = 0.25
 bottom_radius = 0.25
 height = 0.1
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_i4ydp"]
+size = Vector3(1.2, 0.975, 1.5)
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_gsx4y"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ktnp3"]
+albedo_color = Color(0.694118, 0, 0.0588235, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_6lci5"]
+material = SubResource("StandardMaterial3D_ktnp3")
+size = Vector3(1, 0.75, 1.5)
+
 [sub_resource type="SphereShape3D" id="SphereShape3D_36nqa"]
 radius = 2.5
 
-[node name="Catapult" type="CharacterBody3D"]
-collision_layer = 8
-collision_mask = 2
-input_ray_pickable = false
-slide_on_ceiling = false
-wall_min_slide_angle = 0.0
-floor_stop_on_slope = false
-floor_constant_speed = true
-floor_max_angle = 1.0472
+[node name="Catapult" type="Node3D"]
 script = ExtResource("1_s163j")
 
-[node name="WorldCol" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
-shape = SubResource("SphereShape3D_gsx4y")
-
-[node name="PlayerCol" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.488, 0)
-collision_layer = 8
-collision_mask = 5
-
-[node name="Shape" type="CollisionShape3D" parent="PlayerCol"]
-shape = SubResource("BoxShape3D_i4ydp")
-
 [node name="CharPos" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.5737)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.57369)
 
-[node name="AmmoPos1" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25, 1.1, 0.524)
-
-[node name="AmmoPos2" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.25, 1.1, 0.524)
-
-[node name="Body" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)
-mesh = SubResource("BoxMesh_6lci5")
-
-[node name="ArmRot" type="Node3D" parent="."]
+[node name="ArmRot" type="RigidBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.361193, -0.728905)
+collision_layer = 8
 
 [node name="Arm" type="MeshInstance3D" parent="ArmRot"]
 transform = Transform3D(1, 0, 0, 0, 0.975231, -0.221191, 0, 0.221191, 0.975231, 0, 0.129726, -0.567345)
 mesh = SubResource("BoxMesh_wl28e")
-skeleton = NodePath("../..")
+skeleton = NodePath("../../Body/BodyMesh")
 
 [node name="Handle" type="MeshInstance3D" parent="ArmRot/Arm"]
 transform = Transform3D(1, 0, 0, 0, 0.975231, 0.221191, 0, -0.221191, 0.975231, 0, -0.00293481, -0.609227)
 mesh = SubResource("BoxMesh_10u85")
-skeleton = NodePath("../../..")
+skeleton = NodePath("../../../Body/BodyMesh")
 
-[node name="Wheel_FL" type="MeshInstance3D" parent="."]
-transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, -0.549536, 0.25, -0.5)
+[node name="ArmJoint" type="HingeJoint3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.369773, -0.749997)
+node_a = NodePath("../ArmRot")
+node_b = NodePath("../Body")
+angular_limit/enable = true
+angular_limit/upper = 0.785398
+angular_limit/lower = -0.785398
+
+[node name="Body" type="VehicleBody3D" parent="."]
+collision_layer = 8
+collision_mask = 2
+input_ray_pickable = false
+mass = 15.0
+center_of_mass_mode = 1
+
+[node name="WheelCol_FL" type="VehicleWheel3D" parent="Body"]
+transform = Transform3D(1, -1.06581e-14, 0, 1.06581e-14, 1, 0, 0, 0, 1, -0.549536, 0.25, -0.5)
+use_as_traction = true
+wheel_roll_influence = 0.0
+wheel_radius = 0.25
+wheel_rest_length = 0.01
+wheel_friction_slip = 1.0
+suspension_travel = 0.01
+suspension_stiffness = 500.0
+damping_compression = 0.98
+damping_relaxation = 1.0
+
+[node name="Wheel_FL" type="MeshInstance3D" parent="Body/WheelCol_FL"]
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
 mesh = SubResource("CylinderMesh_8acbe")
+skeleton = NodePath("../../BodyMesh")
 
-[node name="Wheel_FR" type="MeshInstance3D" parent="."]
-transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0.550464, 0.25, -0.5)
+[node name="WheelCol_FR" type="VehicleWheel3D" parent="Body"]
+transform = Transform3D(1, -1.06581e-14, 0, 1.06581e-14, 1, 0, 0, 0, 1, 0.550464, 0.25, -0.5)
+wheel_roll_influence = 0.0
+wheel_radius = 0.25
+wheel_rest_length = 0.01
+wheel_friction_slip = 1.0
+suspension_travel = 0.01
+suspension_stiffness = 500.0
+damping_compression = 0.95
+damping_relaxation = 1.0
+
+[node name="Wheel_FR" type="MeshInstance3D" parent="Body/WheelCol_FR"]
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
 mesh = SubResource("CylinderMesh_8acbe")
+skeleton = NodePath("../../BodyMesh")
 
-[node name="Wheel_BL" type="MeshInstance3D" parent="."]
-transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, -0.549536, 0.25, 0.5)
+[node name="WheelCol_BL" type="VehicleWheel3D" parent="Body"]
+transform = Transform3D(1, -1.06581e-14, 0, 1.06581e-14, 1, 0, 0, 0, 1, -0.549536, 0.25, 0.5)
+wheel_roll_influence = 0.0
+wheel_radius = 0.25
+wheel_rest_length = 0.01
+wheel_friction_slip = 1.0
+suspension_travel = 0.01
+suspension_stiffness = 500.0
+damping_compression = 0.95
+damping_relaxation = 1.0
+
+[node name="Wheel_BL" type="MeshInstance3D" parent="Body/WheelCol_BL"]
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
 mesh = SubResource("CylinderMesh_8acbe")
+skeleton = NodePath("../../BodyMesh")
 
-[node name="Wheel_BR" type="MeshInstance3D" parent="."]
-transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0.550464, 0.25, 0.5)
+[node name="WheelCol_BR" type="VehicleWheel3D" parent="Body"]
+transform = Transform3D(1, -1.06581e-14, 0, 1.06581e-14, 1, 0, 0, 0, 1, 0.550464, 0.25, 0.5)
+wheel_roll_influence = 0.0
+wheel_radius = 0.25
+wheel_rest_length = 0.01
+wheel_friction_slip = 1.0
+suspension_travel = 0.01
+suspension_stiffness = 500.0
+damping_compression = 0.95
+damping_relaxation = 1.0
+
+[node name="Wheel_BR" type="MeshInstance3D" parent="Body/WheelCol_BR"]
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
 mesh = SubResource("CylinderMesh_8acbe")
+skeleton = NodePath("../../BodyMesh")
 
-[node name="AttachArea" type="Area3D" parent="."]
+[node name="PlayerCol" type="StaticBody3D" parent="Body"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.488, 0)
+collision_layer = 8
+collision_mask = 5
+
+[node name="Shape" type="CollisionShape3D" parent="Body/PlayerCol"]
+shape = SubResource("BoxShape3D_i4ydp")
+
+[node name="WorldCol" type="CollisionShape3D" parent="Body"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+visible = false
+shape = SubResource("SphereShape3D_gsx4y")
+disabled = true
+
+[node name="BodyMesh" type="MeshInstance3D" parent="Body"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)
+mesh = SubResource("BoxMesh_6lci5")
+skeleton = NodePath(".")
+
+[node name="AttachArea" type="Area3D" parent="Body"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.5)
 collision_layer = 8
 input_ray_pickable = false
 monitorable = false
 
-[node name="Shape" type="CollisionShape3D" parent="AttachArea"]
+[node name="Shape" type="CollisionShape3D" parent="Body/AttachArea"]
 shape = SubResource("SphereShape3D_36nqa")
 
-[connection signal="body_entered" from="AttachArea" to="." method="_player_entered"]
-[connection signal="body_exited" from="AttachArea" to="." method="_player_exited"]
+[node name="AmmoPos1" type="Node3D" parent="Body"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25, 1.1, 0.524)
+
+[node name="AmmoPos2" type="Node3D" parent="Body"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.25, 1.1, 0.524)

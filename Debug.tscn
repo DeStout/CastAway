@@ -17,10 +17,24 @@ grow_vertical = 2
 script = ExtResource("1_45q1j")
 
 [node name="FPS" type="Label" parent="."]
-layout_mode = 0
 offset_left = 33.0
 offset_top = 29.0
 offset_right = 73.0
 offset_bottom = 52.0
-text = "FPS"
+text = "FPS: 144"
+label_settings = SubResource("LabelSettings_fkau6")
+
+[node name="Mute" type="Label" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 171.0
+offset_top = 29.0
+offset_right = 386.0
+offset_bottom = 66.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Mute: None"
 label_settings = SubResource("LabelSettings_fkau6")
